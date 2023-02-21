@@ -21,4 +21,10 @@ public class ConsentRequestController {
     public List<Object> getConsentRequestByPid(@PathVariable("id") Integer patientId){
         return consentRequestService.getAllConsentList(patientId);
     }
+
+    @PostMapping("/response/{crid}/{status}")
+    public void generateResponse(@PathVariable("crid") Integer crid,@PathVariable("status") Integer status){
+        consentRequestService.saveConsentResponce(crid, status);
+    }
+
 }
