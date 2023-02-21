@@ -33,4 +33,9 @@ public class ConsentRequestServiceImpl implements ConsentRequestService{
         else
             consentRequestRepository.updateStatus(crid, ConsentRequestStatus.REJECTED);
     }
+
+    @Override
+    public List<Object> getConsentRequestStatus(Integer patientId, Integer doctorId, Integer hospitalId) {
+        return consentRequestRepository.getConsentRequestStatus(patientId,doctorId,hospitalId);
+    }
 }

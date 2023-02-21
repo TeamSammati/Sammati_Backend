@@ -17,6 +17,9 @@ public interface ConsentRequestRepository extends JpaRepository<ConsentRequest, 
     @Query("select c from ConsentRequest c where c.patientId=?1")
     public List<Object> getConsentList(Integer patientId);
 
+    @Query("select c.consentRequestId,c.consentRequestStatus from ConsentRequest c where c.patientId=?1 and c.doctorId=?2 and c.hospitalId=?3")
+    List<Object> getConsentRequestStatus(Integer patientId, Integer doctorId, Integer hospitalId);
+
     @Modifying
     @Transactional
     @Query("update ConsentRequest set consentRequestStatus=?2 where consentRequestId=?1")
