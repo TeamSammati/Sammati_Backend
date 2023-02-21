@@ -10,4 +10,6 @@ public interface ConsentRequestService {
     public Integer saveConsentRequest(ConsentRequest consentRequest);
 
     List<Object> getAllConsentList(Integer patientId);
+
+    public void saveConsentResponce(Integer crid,Integer status);
 }

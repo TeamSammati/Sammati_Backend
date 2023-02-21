@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import site.sammati.entity.ConsentRequest;
 import site.sammati.repository.ConsentRequestRepository;
+import site.sammati.util.enums.ConsentRequestStatus;
 
 import java.util.Collections;
 import java.util.List;
@@ -22,5 +23,14 @@ public class ConsentRequestServiceImpl implements ConsentRequestService{
     @Override
     public List<Object> getAllConsentList(Integer patientId) {
         return consentRequestRepository.getConsentList(patientId);
+    }
+
+    @Override
+    public void saveConsentResponce(Integer crid,Integer status) {
+
+        if(status==1)
+         consentRequestRepository.updateStatus(crid, ConsentRequestStatus.APPROVED);
+        else
+            consentRequestRepository.updateStatus(crid, ConsentRequestStatus.REJECTED);
     }
 }
