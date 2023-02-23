@@ -13,5 +13,5 @@ public interface ConsentRequestService {
 
     public List<Object> getConsentRequestStatus(Integer patientId, Integer doctorId, Integer hospitalId);
 
-    public void saveConsentResponce(Integer crid,Integer status);
+    public Integer saveConsentResponce(Integer crid,Integer status);
 }

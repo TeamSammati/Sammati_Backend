@@ -27,8 +27,8 @@ public class ConsentRequestController {
     }
 
     @PostMapping("/response/{crid}/{status}")
-    public void generateResponse(@PathVariable("crid") Integer crid,@PathVariable("status") Integer status){
-        consentRequestService.saveConsentResponce(crid, status);
+    public Integer generateResponse(@PathVariable("crid") Integer crid,@PathVariable("status") Integer status){
+        return consentRequestService.saveConsentResponce(crid, status);
     }
 
 }

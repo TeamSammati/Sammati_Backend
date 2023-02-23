@@ -21,9 +21,14 @@ public class ConsentRequest {
             strategy = GenerationType.SEQUENCE,
             generator = "consent_request_sequence"
     )
+    @Column(nullable = false)
     private Integer consentRequestId;
+    @Column(nullable = false)
     private Integer patientId;
+    @Column(nullable = false)
     private Integer doctorId;
+    @Column(nullable = false)
     private Integer hospitalId;
+    @Column(nullable = false)
     private ConsentRequestStatus consentRequestStatus;
 }

@@ -5,10 +5,7 @@ import org.springframework.stereotype.Service;
 import site.sammati.entity.ConsentRequest;
 import site.sammati.repository.ConsentRequestRepository;
 import site.sammati.util.enums.ConsentRequestStatus;
-
-import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class ConsentRequestServiceImpl implements ConsentRequestService{
@@ -16,6 +13,7 @@ public class ConsentRequestServiceImpl implements ConsentRequestService{
     ConsentRequestRepository consentRequestRepository;
     @Override
     public Integer saveConsentRequest(ConsentRequest consentRequest) {
+        consentRequest.setConsentRequestStatus(ConsentRequestStatus.PENDING);
         ConsentRequest cr=consentRequestRepository.save(consentRequest);
         return cr.getConsentRequestId();
     }
@@ -26,12 +24,14 @@ public class ConsentRequestServiceImpl implements ConsentRequestService{
     }
 
     @Override
-    public void saveConsentResponce(Integer crid,Integer status) {
+    public Integer saveConsentResponce(Integer crid,Integer status) {
 
         if(status==1)
-         consentRequestRepository.updateStatus(crid, ConsentRequestStatus.APPROVED);
+            return consentRequestRepository.updateStatus(crid, ConsentRequestStatus.APPROVED);
+        else if(status==2)
+            return consentRequestRepository.updateStatus(crid, ConsentRequestStatus.REJECTED);
         else
-            consentRequestRepository.updateStatus(crid, ConsentRequestStatus.REJECTED);
+            return -1;
     }
 
     @Override

@@ -23,5 +23,5 @@ public interface ConsentRequestRepository extends JpaRepository<ConsentRequest, 
     @Modifying
     @Transactional
     @Query("update ConsentRequest set consentRequestStatus=?2 where consentRequestId=?1")
-    void updateStatus(Integer crid, ConsentRequestStatus status);
+    Integer updateStatus(Integer crid, ConsentRequestStatus status);
 }
