@@ -12,6 +12,7 @@ public interface ConsentRequestService {
     List<Object> getAllConsentList(Integer patientId);
 
     public List<Object> getConsentRequestStatus(Integer patientId, Integer doctorId, Integer hospitalId);
+    public List<Object> getConsentRequestStatusall(Integer doctorId, Integer hospitalId);
 
     public Integer saveConsentResponce(Integer crid,Integer status);
 }
