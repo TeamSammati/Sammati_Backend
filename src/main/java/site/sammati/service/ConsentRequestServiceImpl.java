@@ -38,4 +38,8 @@ public class ConsentRequestServiceImpl implements ConsentRequestService{
     public List<Object> getConsentRequestStatus(Integer patientId, Integer doctorId, Integer hospitalId) {
         return consentRequestRepository.getConsentRequestStatus(patientId,doctorId,hospitalId);
     }
+
+    @Override
+    public List<Object> getConsentRequestStatusall(Integer doctorId, Integer hospitalId) {
+        return consentRequestRepository.getConsentRequestStatusall(doctorId,hospitalId);    }
 }

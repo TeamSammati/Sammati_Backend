@@ -7,6 +7,7 @@ import site.sammati.service.ConsentRequestService;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class ConsentRequestController {
 
@@ -24,6 +25,10 @@ public class ConsentRequestController {
     @GetMapping("/get_status/{pid}/{did}/{hid}")
     public List<Object> getConsentRequestStatus(@PathVariable("pid") Integer patientId,@PathVariable("did") Integer doctorId,@PathVariable("hid") Integer hospitalId){
         return consentRequestService.getConsentRequestStatus(patientId,doctorId,hospitalId);
+    }
+    @GetMapping("/get_status_all/{did}/{hid}")
+    public List<Object> getConsentRequestStatusall(@PathVariable("did") Integer doctorId,@PathVariable("hid") Integer hospitalId){
+        return consentRequestService.getConsentRequestStatusall(doctorId,hospitalId);
     }
 
     @PostMapping("/response/{crid}/{status}")
