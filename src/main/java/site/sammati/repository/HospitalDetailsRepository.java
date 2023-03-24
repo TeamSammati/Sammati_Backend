@@ -11,4 +11,7 @@ public interface HospitalDetailsRepository extends JpaRepository<HospitalDetails
 
     @Query("select ipAddress from HospitalDetails where hospitalId=?1")
     String getIpAddressByHospitalId(Integer hospitalId);
+
+    @Query("select hospitalName from HospitalDetails where hospitalId=?1")
+    String gethospitalNameByHospitalId(Integer hospitalId);
 }
