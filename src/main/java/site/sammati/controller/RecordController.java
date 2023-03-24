@@ -17,7 +17,7 @@ public class RecordController {
     private final RecordService recordService;
 
     @GetMapping("/handle_records")
-    public void handleRecords(@RequestParam Integer patientID, @RequestParam Integer reqType){
-        recordService.handleRecords(patientID,reqType);
+    public ResponseEntity<Object> handleRecords(@RequestParam Integer patientID, @RequestParam Integer reqType){
+        return recordService.handleRecords(patientID,reqType);
     }
 }
