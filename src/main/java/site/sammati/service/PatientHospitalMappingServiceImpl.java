@@ -19,4 +19,14 @@ public class PatientHospitalMappingServiceImpl implements PatientHospitalMapping
         patientHospitalRepository.save(patientHospitalMapping);
         return patientHospitalMapping.getId();
     }
+
+    @Override
+    public Boolean IsPatientExist(Integer patientId)
+    {
+        Integer id =patientHospitalRepository.patientExist(patientId);
+        if(id!=null)return true;
+
+        return false;
+
+    }
 }

@@ -10,4 +10,6 @@ import site.sammati.entity.PatientHospitalMapping;
 public interface PatientHospitalMappingService
 {
     Integer savePatientHospitalMapping(PatientHospitalMapping patientHospitalMapping);
+
+    Boolean IsPatientExist(Integer patientId);
 }
