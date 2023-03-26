@@ -38,7 +38,7 @@ public class RecordServiceImpl implements RecordService{
                 List<Object> result = restTemplate.getForObject(uri, List.class);
                 System.out.println(result);
 
-                allData.put(hosName, result);
+                allData.put(i.getHospitalId()+"-"+hosName, result);
 
             }
         }
