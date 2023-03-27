@@ -11,13 +11,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "hospital_ip_mapping",uniqueConstraints = { @UniqueConstraint(name = "UniqueIpMapping", columnNames = { "hospitalId", "ipAddress" }) })
-public class HospitalDetails {
+@Table(name = "registered_hospitals",uniqueConstraints = { @UniqueConstraint(name = "UniqueIpMapping", columnNames = { "hospitalId", "ipAddress" }) })
+public class RegisteredHospitals {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    @Column(nullable = false)
     private Integer hospitalId;
 
     @Column(nullable = false)
