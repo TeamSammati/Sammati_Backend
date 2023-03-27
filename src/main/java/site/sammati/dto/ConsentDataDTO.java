@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Date;
 import java.util.List;
 
 @Data
@@ -12,8 +13,9 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class ConsentDataDTO {
-    Integer consentRequestId;
-    Integer patientId;
-    Integer duration;
-    List<ConsentDataMappingDTO> consentDataMappingDTOList;
+    private Integer consentRequestId;
+    private Integer patientId;
+    private Integer duration;
+    private Integer consentType;
+    private List<ConsentDataMappingDTO> consentDataMappingDTOList;
 }
