@@ -1,5 +1,6 @@
 package site.sammati.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,6 +32,7 @@ public class ConsentData {
 
     private Integer consentType;
 
-    @OneToMany(mappedBy = "consentData")
+    @OneToMany(mappedBy = "consentData",fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<ConsentDataMapping> consentDataMappingList;
 }
