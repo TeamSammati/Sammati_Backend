@@ -14,4 +14,10 @@ public class RegisteredDoctorServiceImpl implements RegisteredDoctorService{
     public RegisteredDoctors getDoctors(Integer doctorId, Integer hospitalId) {
         return repository.findByDoctorIdAndAndHospitalId(doctorId,hospitalId);
     }
+
+    @Override
+    public Integer savePatientHospitalMapping(RegisteredDoctors registeredDoctors) {
+        repository.save(registeredDoctors);
+        return registeredDoctors.getDoctorId();
+    }
 }

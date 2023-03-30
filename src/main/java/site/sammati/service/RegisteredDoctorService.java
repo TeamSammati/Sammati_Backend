@@ -4,4 +4,6 @@ import site.sammati.entity.RegisteredDoctors;
 
 public interface RegisteredDoctorService {
     RegisteredDoctors getDoctors(Integer doctorId, Integer hospitalId);
+
+    Integer savePatientHospitalMapping(RegisteredDoctors registeredDoctors);
 }
