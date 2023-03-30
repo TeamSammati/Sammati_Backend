@@ -15,7 +15,7 @@ import java.util.Objects;
 public interface ConsentRequestRepository extends JpaRepository<ConsentRequest, Integer>
 {
     @Query("select c from ConsentRequest c where c.patientId=?1 and c.consentRequestStatus=0")
-    public List<Object> getConsentList(Integer patientId);
+    public List<ConsentRequest> getConsentList(Integer patientId);
 
     @Query("select c.consentRequestId,c.consentRequestStatus from ConsentRequest c where c.patientId=?1 and c.doctorId=?2 and c.hospitalId=?3")
     List<Object> getConsentRequestStatus(Integer patientId, Integer doctorId, Integer hospitalId);
@@ -25,6 +25,6 @@ public interface ConsentRequestRepository extends JpaRepository<ConsentRequest, 
     @Query("update ConsentRequest set consentRequestStatus=?2 where consentRequestId=?1")
     Integer updateStatus(Integer crid, ConsentRequestStatus status);
 
-    @Query("select c.patientId, c.consentRequestId,c.consentRequestStatus from ConsentRequest c where c.doctorId=?1 and c.hospitalId=?2")
+    @Query("select c from ConsentRequest c where c.doctorId=?1 and c.hospitalId=?2")
     List<Object> getConsentRequestStatusall(Integer doctorId, Integer hospitalId);
 }

@@ -9,7 +9,7 @@ import java.util.List;
 public interface ConsentRequestService {
     public Integer saveConsentRequest(ConsentRequest consentRequest);
 
-    List<Object> getAllConsentList(Integer patientId);
+    List<ConsentRequest> getAllConsentList(Integer patientId);
 
     public List<Object> getConsentRequestStatus(Integer patientId, Integer doctorId, Integer hospitalId);
     public List<Object> getConsentRequestStatusall(Integer doctorId, Integer hospitalId);
