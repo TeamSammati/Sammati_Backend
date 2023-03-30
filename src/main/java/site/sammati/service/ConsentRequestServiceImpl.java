@@ -19,7 +19,7 @@ public class ConsentRequestServiceImpl implements ConsentRequestService{
     }
 
     @Override
-    public List<Object> getAllConsentList(Integer patientId) {
+    public List<ConsentRequest> getAllConsentList(Integer patientId) {
         return consentRequestRepository.getConsentList(patientId);
     }
 

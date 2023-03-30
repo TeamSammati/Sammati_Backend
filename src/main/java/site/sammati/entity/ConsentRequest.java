@@ -2,6 +2,7 @@ package site.sammati.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import site.sammati.util.enums.ConsentRequestStatus;
@@ -10,6 +11,7 @@ import site.sammati.util.enums.ConsentRequestStatus;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ConsentRequest {
     @Id
     @SequenceGenerator(
@@ -31,4 +33,6 @@ public class ConsentRequest {
     private Integer hospitalId;
     @Column(nullable = false)
     private ConsentRequestStatus consentRequestStatus;
+    @Column
+    private String purpose;
 }
