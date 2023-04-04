@@ -1,16 +1,13 @@
 package site.sammati.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import site.sammati.entity.ConsentData;
-import site.sammati.entity.ConsentDataMapping;
-import site.sammati.entity.PatientHospitalMapping;
-import site.sammati.repository.ConsentDataMappingRepository;
-import site.sammati.repository.ConsentDataRepository;
-import site.sammati.repository.RegisteredHospitalRepository;
-import site.sammati.repository.PatientHospitalRepository;
+import site.sammati.dto.ConsentRequestDTO;
+import site.sammati.entity.*;
+import site.sammati.repository.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,7 +21,8 @@ public class RecordServiceImpl implements RecordService{
 
     private final PatientHospitalRepository patientHospitalRepository;
     private final RegisteredHospitalRepository registeredHospitalRepository;
-
+    private final ConsentRequestRepository consentRequestRepository;
+    private final LogsRepository logsRepository;
     private final ConsentDataRepository consentDataRepository;
     private final ConsentDataMappingRepository consentDataMappingRepository;
 
@@ -94,7 +92,20 @@ public class RecordServiceImpl implements RecordService{
             finalData.add(data);
         }
 
-
+        addLogs(consentRequestId);
         return new ResponseEntity<Object>(finalData, HttpStatus.OK);
+    }
+
+//    @Autowired
+    public void addLogs(Integer consentRequestId){
+
+        ConsentRequest consentRequest=consentRequestRepository.findByConsentRequestId(consentRequestId);
+        Logs logs= Logs.builder()
+                .doctorId(consentRequest.getDoctorId())
+                .patientId(consentRequest.getPatientId())
+                .consentRequestId(consentRequest.getConsentRequestId())
+                .hospitalId(consentRequest.getHospitalId())
+                .build();
+        logsRepository.save(logs);
     }
 }
