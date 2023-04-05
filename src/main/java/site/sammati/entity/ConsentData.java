@@ -32,6 +32,9 @@ public class ConsentData {
 
     private Integer consentType;
 
+    @Column(nullable = false)
+    private Integer activationStatus;
+
     @OneToMany(mappedBy = "consentData",fetch = FetchType.LAZY)
     @JsonIgnore
     private List<ConsentDataMapping> consentDataMappingList;
