@@ -24,4 +24,7 @@ public class PatientHospitalMapping
     @Column(nullable = false)
     private Integer hospitalId;
 
+    @Column(nullable = false)
+    private Integer status;
+
 }
