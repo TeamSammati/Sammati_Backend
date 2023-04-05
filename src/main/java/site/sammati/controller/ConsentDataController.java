@@ -1,9 +1,7 @@
 package site.sammati.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import site.sammati.dto.ConsentDataDTO;
 import site.sammati.entity.ConsentData;
 import site.sammati.entity.ConsentDataMapping;
@@ -11,6 +9,7 @@ import site.sammati.service.ConsentDataService;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
 
 
 @RestController
@@ -40,5 +39,17 @@ public class ConsentDataController {
         }
 
         return consentId;
+    }
+
+    @GetMapping("/active-consents")
+    public List<ConsentData> activeConsent(@RequestParam Integer patientId){
+        List<ConsentData> activeConsentList=consentDataService.activeConsent(patientId);
+        return activeConsentList;
+    }
+
+    @PostMapping("/revoke-consent")
+    public Boolean revokeConsent(@RequestParam Integer consentId){
+        Integer revokeConsentId= consentDataService.revokeConsent(consentId);
+        return revokeConsentId>0;
     }
 }
