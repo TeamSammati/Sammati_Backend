@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import site.sammati.dto.ConsentRequestDTO;
 import site.sammati.entity.ConsentRequest;
 import site.sammati.util.enums.ConsentRequestStatus;
 
@@ -27,4 +28,6 @@ public interface ConsentRequestRepository extends JpaRepository<ConsentRequest, 
 
     @Query("select c from ConsentRequest c where c.doctorId=?1 and c.hospitalId=?2")
     List<Object> getConsentRequestStatusall(Integer doctorId, Integer hospitalId);
+
+    ConsentRequest findByConsentRequestId(Integer consentRequestId);
 }

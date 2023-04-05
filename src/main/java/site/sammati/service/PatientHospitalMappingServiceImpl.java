@@ -29,4 +29,10 @@ public class PatientHospitalMappingServiceImpl implements PatientHospitalMapping
         return false;
 
     }
+
+    @Override
+    public void changePatientHospitalMapping(Integer patientId, Integer hospitalId)
+    {
+        patientHospitalRepository.changeMapping(patientId,hospitalId);
+    }
 }

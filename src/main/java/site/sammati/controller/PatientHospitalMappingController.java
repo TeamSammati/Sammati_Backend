@@ -19,9 +19,10 @@ public class PatientHospitalMappingController
 {
     private final PatientHospitalMappingService patientHospitalMappingService;
 
-    @PostMapping("/add_patient_hospital_mapping")
-    public Integer add_patient_hospital_mapping(@RequestBody PatientHospitalMapping patientHospitalMapping){
-        return patientHospitalMappingService.savePatientHospitalMapping(patientHospitalMapping);
+    @PostMapping("/change-patient-hospital-mapping/{pId}/{hId}")
+    public void change_patient_hospital_mapping(@PathVariable("pId") Integer patientId ,@PathVariable("hId") Integer hospitalId){
+        System.out.println("in sammati");
+        patientHospitalMappingService.changePatientHospitalMapping(patientId,hospitalId);
     }
 
     @GetMapping("/patient_existIn_hospital/{pId}")
