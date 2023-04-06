@@ -52,4 +52,10 @@ public class ConsentDataController {
         Integer revokeConsentId= consentDataService.revokeConsent(consentId);
         return revokeConsentId>0;
     }
+
+    @GetMapping("/active-consents-doctor")
+    public List<ConsentData> activeConsentForDoctor(@RequestParam Integer doctorId){
+        List<ConsentData> activeConsentList=consentDataService.activeConsentOfDoctor(doctorId);
+        return activeConsentList;
+    }
 }

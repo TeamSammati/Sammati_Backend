@@ -23,4 +23,7 @@ public interface ConsentDataRepository extends JpaRepository<ConsentData,Integer
     @Transactional
     @Query("update ConsentData set activationStatus=0 where consentId=?1")
     Integer updateActivationStatus(Integer consentId);
+
+    @Query("select c from ConsentData c where c.doctorId=?1 and c.activationStatus=1")
+    List<ConsentData> getActiveConsentForDoctor(Integer doctorId);
 }
