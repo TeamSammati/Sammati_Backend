@@ -32,4 +32,8 @@ public class ConsentDataServiceImpl implements ConsentDataService{
     public Integer revokeConsent(Integer consentId){
         return consentDataRepository.updateActivationStatus(consentId);
     }
+
+    public List<ConsentData> activeConsentOfDoctor(Integer doctorId){
+        return consentDataRepository.getActiveConsentForDoctor(doctorId);
+    }
 }

@@ -27,7 +27,8 @@ public class ConsentData {
     private Integer patientId;
     @Column(nullable = false)
     private Integer duration;
-
+    @Column(nullable = false)
+    private Integer doctorId;
     private Date consentTimeStamp;
 
     private Integer consentType;

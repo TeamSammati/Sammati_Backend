@@ -13,4 +13,6 @@ public interface ConsentDataService {
     List<ConsentData> activeConsent(Integer patientId);
 
     Integer revokeConsent(Integer consentId);
+
+    List<ConsentData> activeConsentOfDoctor(Integer doctorId);
 }
