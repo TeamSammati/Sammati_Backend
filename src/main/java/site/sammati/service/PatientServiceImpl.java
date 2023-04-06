@@ -1,6 +1,7 @@
 package site.sammati.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -17,11 +18,12 @@ import site.sammati.repository.RegisteredHospitalRepository;
 public class PatientServiceImpl implements PatientService{
 
     private final PatientHospitalMappingService patientHospitalMappingService;
+    private final Environment env;
     @Override
     public PatientDataDto getPatientData(PatientOtpDto patientOtpDto)
     {
 
-        String uri = "http://172.16.131.147:6989/api/auth/send-patient-data";
+        String uri = "http:"+env.getProperty("app.patient_server")+":"+env.getProperty("app.patient_port")+"/api/auth/send-patient-data";
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

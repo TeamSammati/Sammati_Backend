@@ -16,7 +16,7 @@ public class PatientDataController
 {
     private final PatientService patientService;
 
-    @PostMapping("/get-patient-data-by-patientId")
+    @PostMapping("/get-patient-data-by-patient-id")
     public PatientDataDto get_patient_data(@RequestBody PatientOtpDto patientOtpDto)
     {
         System.out.println("in sammati");

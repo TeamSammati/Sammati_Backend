@@ -22,12 +22,12 @@ public class ConsentRequestController {
 
     private final RegisteredDoctorService registeredDoctorService;
 
-    @PostMapping("/consent_request")
+    @PostMapping("/add-consent-request")
     public Integer generateConsentRequest(@RequestBody ConsentRequest consentRequest){
         System.out.println(consentRequest);
         return consentRequestService.saveConsentRequest(consentRequest);
     }
-    @GetMapping("Request_List/{id}")
+    @GetMapping("request-list/{id}")
     public List<ConsentRequestDTO> getConsentRequestByPid(@PathVariable("id") Integer patientId){
         List<ConsentRequest> consentRequestList=consentRequestService.getAllConsentList(patientId);
         List<ConsentRequestDTO> consentRequestDTOList=new ArrayList<>();
@@ -50,11 +50,11 @@ public class ConsentRequestController {
 
         return consentRequestDTOList;
     }
-    @GetMapping("/get_status/{pid}/{did}/{hid}")
+    @GetMapping("/get-status/{pid}/{did}/{hid}")
     public List<Object> getConsentRequestStatus(@PathVariable("pid") Integer patientId,@PathVariable("did") Integer doctorId,@PathVariable("hid") Integer hospitalId){
         return consentRequestService.getConsentRequestStatus(patientId,doctorId,hospitalId);
     }
-    @GetMapping("/get_status_all/{did}/{hid}")
+    @GetMapping("/get-status-all/{did}/{hid}")
     public List<Object> getConsentRequestStatusall(@PathVariable("did") Integer doctorId,@PathVariable("hid") Integer hospitalId){
         return consentRequestService.getConsentRequestStatusall(doctorId,hospitalId);
     }

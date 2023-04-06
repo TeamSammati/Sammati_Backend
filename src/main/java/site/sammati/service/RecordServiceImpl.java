@@ -2,6 +2,7 @@ package site.sammati.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -25,6 +26,7 @@ public class RecordServiceImpl implements RecordService{
     private final LogsRepository logsRepository;
     private final ConsentDataRepository consentDataRepository;
     private final ConsentDataMappingRepository consentDataMappingRepository;
+    private final Environment env;
 
     @Override
     public ResponseEntity<Object> handleRecords(Integer patientID, Integer reqType) {
@@ -80,7 +82,7 @@ public class RecordServiceImpl implements RecordService{
             System.out.println("hospitalName "+hosName);
             System.out.println("ipaddress "+ipaddress);
             System.out.println("recordId "+entry.getValue());
-            String uri = "http://172.16.131.147:6969/api/auth/send_patient_records";
+            String uri = "http:"+env.getProperty("app.patient_server")+":"+env.getProperty("app.patient_port")+"/api/auth/send_patient_records";
             RestTemplate restTemplate = new RestTemplate();
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
