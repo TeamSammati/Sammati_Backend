@@ -1,5 +1,8 @@
 package site.sammati.service;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import site.sammati.entity.ConsentData;
@@ -9,12 +12,17 @@ import site.sammati.repository.ConsentDataRepository;
 
 import java.util.List;
 
+import java.nio.charset.Charset;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
 @Service
 @RequiredArgsConstructor
 public class ConsentDataServiceImpl implements ConsentDataService{
 
     private final ConsentDataRepository consentDataRepository;
     private final ConsentDataMappingRepository consentDataMappingRepository;
+
     @Override
     public Integer saveConsentData(ConsentData consentData) {
         return consentDataRepository.save(consentData).getConsentId();

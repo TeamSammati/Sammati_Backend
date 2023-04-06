@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(uniqueConstraints = { @UniqueConstraint(name = "ConsentDataMapping", columnNames = { "hospitalId", "recordId" }) })
 public class ConsentDataMapping {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
