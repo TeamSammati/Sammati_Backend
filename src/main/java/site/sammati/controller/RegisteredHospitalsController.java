@@ -12,7 +12,7 @@ import site.sammati.service.RegisteredHospitalService;
 public class RegisteredHospitalsController {
 
     private final RegisteredHospitalService registeredHospitalService;
-    @PostMapping("/add_hospital")
+    @PostMapping("/add-hospital")
     public Integer addHospital(@RequestBody RegisteredHospitals hospitalDetails){
         return registeredHospitalService.addHospital(hospitalDetails);
     }
