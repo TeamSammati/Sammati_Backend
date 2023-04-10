@@ -23,7 +23,7 @@ public class PatientServiceImpl implements PatientService{
     public PatientDataDto getPatientData(PatientOtpDto patientOtpDto)
     {
 
-        String uri = "http:"+env.getProperty("app.patient_server")+":"+env.getProperty("app.patient_port")+"/api/auth/send-patient-data";
+        String uri = "http://"+env.getProperty("app.patient_server")+":"+env.getProperty("app.patient_port")+"/api/auth/send-patient-data";
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

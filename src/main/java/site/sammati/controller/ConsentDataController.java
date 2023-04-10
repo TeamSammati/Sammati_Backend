@@ -17,6 +17,7 @@ import site.sammati.entity.ConsentData;
 import site.sammati.entity.ConsentDataMapping;
 import site.sammati.repository.RegisteredHospitalRepository;
 import site.sammati.service.ConsentDataService;
+import site.sammati.service.ConsentRequestService;
 import site.sammati.service.EncyDecryService;
 import site.sammati.service.OTPService;
 
@@ -45,10 +46,13 @@ public class ConsentDataController {
     private final RegisteredHospitalRepository registeredHospitalRepository;
     private final ConsentDataService consentDataService;
 
-    public ConsentDataController(ConsentDataService consentDataService, RegisteredHospitalRepository registeredHospitalRepository, Environment env) {
+    private final ConsentRequestService consentRequestService;
+
+    public ConsentDataController(ConsentDataService consentDataService, RegisteredHospitalRepository registeredHospitalRepository, Environment env,ConsentRequestService consentRequestService) {
         this.consentDataService = consentDataService;
         this.registeredHospitalRepository = registeredHospitalRepository;
         this.env=env;
+        this.consentRequestService=consentRequestService;
         consentDataCache = CacheBuilder.newBuilder()
                 .expireAfterWrite(EXPIRE_MIN, TimeUnit.MINUTES)
                 .build(new CacheLoader<Integer, ConsentDataDTO>() {
@@ -79,7 +83,7 @@ public class ConsentDataController {
 
     @PostMapping("/receive-consent-data")
     public Integer receiveConsentData(@RequestBody ConsentDataDTO consentDataDTO) throws ExecutionException {
-//        System.out.println(consentDataDTO);
+        System.out.println(consentDataDTO);
         consentDataCache.put(consentDataDTO.getPatientId(), consentDataDTO);
         Integer patientId = consentDataDTO.getPatientId();
         String phoneNo = consentDataDTO.getPatientPhoneNo();
@@ -104,12 +108,14 @@ public class ConsentDataController {
         System.out.println(allKeys);
         System.out.println(otp);
         keyCheckCache.put(patientId, encryptData(allKeys, otp));
-
+        System.out.println(phoneNo);
+        System.out.println(myMessage);
         System.out.println(consentDataCache.get(consentDataDTO.getPatientId()));
         return sendOTP(phoneNo, myMessage);
+//        return 69;
     }
 
-    @PostMapping("/validate-keys")
+    @GetMapping("/validate-keys")
     public Integer validateKeys(@RequestParam Integer patientId, @RequestParam String otp) {
         String encrAllKeys = keyCheckCache.getIfPresent(patientId);
 
@@ -137,6 +143,7 @@ public class ConsentDataController {
             ConsentData consentData = ConsentData.builder()
                     .consentRequestId(consentDataDTO.getConsentRequestId())
                     .patientId(consentDataDTO.getPatientId())
+                    .doctorId(consentDataDTO.getDoctorId())
                     .duration(consentDataDTO.getDuration())
                     .consentTimeStamp(date)
                     .activationStatus(consentDataDTO.getActivationStatus())
@@ -154,6 +161,7 @@ public class ConsentDataController {
                         .build();
                 consentDataService.saveConsentDataMapping(consentDataMapping);
             }
+            consentRequestService.saveConsentResponce(consentDataDTO.getConsentRequestId(),1);
             return consentId;
 //            return 0;
         }

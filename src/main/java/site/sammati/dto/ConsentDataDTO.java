@@ -16,6 +16,7 @@ public class ConsentDataDTO {
     private Integer consentRequestId;
     private Integer patientId;
     private String patientPhoneNo;
+    private Integer doctorId;
     private Integer duration;
     private Integer consentType;
     private List<ConsentDataMappingDTO> consentDataMappingDTOList;

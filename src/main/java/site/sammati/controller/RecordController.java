@@ -20,9 +20,10 @@ public class RecordController {
         return recordService.handleRecords(patientID,reqType);
     }
 
-    @PostMapping("/fetch-records-by-consent-request-id/{consentRequestId}")
-    public ResponseEntity<Object> fetchRecordsByConsentRequestId(@PathVariable("consentRequestId") Integer consentRequestId)
+    @PostMapping("/fetch-records-by-consent-id/{consentId}/{doctorId}/{hospitalId}")
+    public ResponseEntity<Object> fetchRecordsByConsentId(@PathVariable("consentId") Integer consentId,@PathVariable("doctorId") Integer doctorId, @PathVariable("hospitalId") Integer hospitalId)
     {
-        return recordService.fetchRecordsByConsentRequestId(consentRequestId);
+        System.out.println("in sammati");
+        return recordService.fetchRecordsByConsentId(consentId,doctorId,hospitalId);
     }
 }
