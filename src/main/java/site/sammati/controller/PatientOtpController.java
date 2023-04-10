@@ -22,7 +22,7 @@ public class PatientOtpController
     public Boolean generateOtp(@PathVariable Integer patientId)
     {
 
-        String uri = "http:"+env.getProperty("app.patient_server")+":"+env.getProperty("app.patient_port")+"/api/auth/generate-otp-patient/"+patientId;
+        String uri = "http://"+env.getProperty("app.patient_server")+":"+env.getProperty("app.patient_port")+"/api/auth/generate-otp-patient/"+patientId;
         RestTemplate restTemplate = new RestTemplate();
         boolean result=restTemplate.postForObject(uri,null, Boolean.class);
         return result;

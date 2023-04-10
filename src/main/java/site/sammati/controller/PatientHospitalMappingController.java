@@ -38,7 +38,7 @@ public class PatientHospitalMappingController
     @PostMapping("/global-patient-id-exist/{pId}")
     public Boolean checkGlobalPatientId(@PathVariable("pId") Integer patientId)
     {
-        String uri = "http:"+env.getProperty("app.patient_server")+":"+env.getProperty("app.patient_port")+"/api/auth/global-patient-id-exist/"+patientId;
+        String uri = "http://"+env.getProperty("app.patient_server")+":"+env.getProperty("app.patient_port")+"/api/auth/global-patient-id-exist/"+patientId;
         RestTemplate restTemplate = new RestTemplate();
         Boolean response = restTemplate.postForObject(uri, null,  Boolean.class);
         return response;

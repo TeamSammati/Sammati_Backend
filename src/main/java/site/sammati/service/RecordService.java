@@ -12,5 +12,7 @@ public interface RecordService {
 
     ResponseEntity<Object> handleRecords(Integer patientID, Integer reqType);
 
-    ResponseEntity<Object> fetchRecordsByConsentRequestId(Integer consentRequestId);
+    //ResponseEntity<Object> fetchRecordsByConsentRequestId(Integer consentRequestId);
+
+    ResponseEntity<Object> fetchRecordsByConsentId(Integer consentId, Integer doctorId, Integer hospitalId);
 }

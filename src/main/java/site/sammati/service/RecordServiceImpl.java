@@ -28,6 +28,8 @@ public class RecordServiceImpl implements RecordService{
     private final ConsentDataMappingRepository consentDataMappingRepository;
     private final Environment env;
 
+    private final DelegationMappingRepository delegationMappingRepository;
+
     @Override
     public ResponseEntity<Object> handleRecords(Integer patientID, Integer reqType) {
         List<Map<String,Object>> finaldata=new ArrayList<>();
@@ -42,7 +44,7 @@ public class RecordServiceImpl implements RecordService{
                 System.out.println("hospitalId "+i.getHospitalId());
                 System.out.println("hospitalName "+hosName);
                 System.out.println("ipaddress "+ipaddress);
-                String uri = "http://"+ipaddress+":6969/api/auth/send_records/"+patientID+"/"+reqType;
+                String uri = "http://"+ipaddress+":6969/api/auth/send-records/"+patientID+"/"+reqType;
                 RestTemplate restTemplate = new RestTemplate();
                 List<Object> result = restTemplate.getForObject(uri, List.class);
                 System.out.println(result);
@@ -55,12 +57,51 @@ public class RecordServiceImpl implements RecordService{
         }
         return new ResponseEntity<Object>(finaldata, HttpStatus.OK);
     }
+//    @Override
+//    public ResponseEntity<Object> fetchRecordsByConsentRequestId(Integer consentRequestId)
+//    {
+//        List<Map<String,Object>> finalData=new ArrayList<>();
+//        Integer consentId=consentDataRepository.getConsentId(consentRequestId);
+//        List<List<Integer>> hospitalRecordMapping=consentDataMappingRepository.findByConsentId(consentId);
+//        Map<Integer,ArrayList<Integer>> list=new HashMap<>();
+//        for(List<Integer> i: hospitalRecordMapping) {
+//            Integer hospitalId = i.get(0);
+//            Integer recordId = i.get(1);
+//            if (list.get(hospitalId) == null) {
+//                list.put(hospitalId, new ArrayList<Integer>());
+//            }
+//            list.get(hospitalId).add(recordId);
+//        }
+//
+//        for (Map.Entry<Integer,ArrayList<Integer>> entry : list.entrySet())
+//        {
+//            Map<String, Object> data = new HashMap<String, Object>();
+//            String ipaddress= registeredHospitalRepository.getIpAddressByHospitalId(entry.getKey());
+//            String hosName= registeredHospitalRepository.gethospitalNameByHospitalId(entry.getKey());
+//            ArrayList<Integer> recordIds=entry.getValue();
+//            System.out.println("hospitalId "+entry.getKey());
+//            System.out.println("hospitalName "+hosName);
+//            System.out.println("ipaddress "+ipaddress);
+//            System.out.println("recordId "+entry.getValue());
+//            String uri = "http://172.16.131.147:6969/api/auth/send_patient_records";
+//            RestTemplate restTemplate = new RestTemplate();
+//            HttpHeaders headers = new HttpHeaders();
+//            headers.setContentType(MediaType.APPLICATION_JSON);
+//            HttpEntity<ArrayList<Integer>> request = new HttpEntity<ArrayList<Integer>>(recordIds, headers);
+//            List<Object> result = restTemplate.postForObject(uri, request , List.class);
+//            data.put("hospitalId", entry.getKey());
+//            data.put("hospitalName", registeredHospitalRepository.gethospitalNameByHospitalId(entry.getKey()));
+//            data.put("data", result);
+//            finalData.add(data);
+//        }
+//
+//        addLogs(consentRequestId);
+//        return new ResponseEntity<Object>(finalData, HttpStatus.OK);
+//    }
 
-    @Override
-    public ResponseEntity<Object> fetchRecordsByConsentRequestId(Integer consentRequestId)
+    public ResponseEntity<Object> fetchPatientData(Integer consentId)
     {
         List<Map<String,Object>> finalData=new ArrayList<>();
-        Integer consentId=consentDataRepository.getConsentId(consentRequestId);
         List<List<Integer>> hospitalRecordMapping=consentDataMappingRepository.findByConsentId(consentId);
         Map<Integer,ArrayList<Integer>> list=new HashMap<>();
         for(List<Integer> i: hospitalRecordMapping) {
@@ -82,7 +123,7 @@ public class RecordServiceImpl implements RecordService{
             System.out.println("hospitalName "+hosName);
             System.out.println("ipaddress "+ipaddress);
             System.out.println("recordId "+entry.getValue());
-            String uri = "http:"+env.getProperty("app.patient_server")+":"+env.getProperty("app.patient_port")+"/api/auth/send_patient_records";
+            String uri = "http://"+ipaddress+":6969/api/auth/send-patient-records";
             RestTemplate restTemplate = new RestTemplate();
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
@@ -94,11 +135,30 @@ public class RecordServiceImpl implements RecordService{
             finalData.add(data);
         }
 
-        addLogs(consentRequestId);
+       // addLogs(consentRequestId);
         return new ResponseEntity<Object>(finalData, HttpStatus.OK);
     }
 
-//    @Autowired
+
+    @Override
+    public ResponseEntity<Object> fetchRecordsByConsentId(Integer cId, Integer dId, Integer hId)
+    {
+
+        if(consentDataRepository.findDoctor(cId,dId,hId).size()!=0)
+        {
+            System.out.println("regular doctor");
+            return fetchPatientData(cId);
+
+        }
+        else if(delegationMappingRepository.findDoctor(cId,dId,hId).size()!=0)
+        {
+            System.out.println("delegation doctor");
+            return fetchPatientData(cId);
+        }
+        return null;
+    }
+
+    //    @Autowired
     public void addLogs(Integer consentRequestId){
 
         ConsentRequest consentRequest=consentRequestRepository.findByConsentRequestId(consentRequestId);

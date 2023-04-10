@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import site.sammati.entity.RegisteredHospitals;
 
+import java.util.List;
+
 @Repository
 public interface RegisteredHospitalRepository extends JpaRepository<RegisteredHospitals,Integer> {
 
@@ -14,4 +16,8 @@ public interface RegisteredHospitalRepository extends JpaRepository<RegisteredHo
 
     @Query("select hospitalName from RegisteredHospitals where hospitalId=?1")
     String gethospitalNameByHospitalId(Integer hospitalId);
+
+
+    @Query("select r from RegisteredHospitals r")
+    List<RegisteredHospitals> getHospitalDetails();
 }
