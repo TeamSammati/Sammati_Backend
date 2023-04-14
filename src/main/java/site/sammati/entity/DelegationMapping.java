@@ -26,9 +26,6 @@ public class DelegationMapping
     private Integer doctorId;
 
     @Column(nullable = false)
-    private String doctorName;
-
-    @Column(nullable = false)
     private Integer hospitalId;
 
     @Column(nullable = false)

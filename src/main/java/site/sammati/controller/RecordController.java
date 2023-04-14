@@ -17,10 +17,11 @@ public class RecordController {
 
     @GetMapping("/handle-records")
     public ResponseEntity<Object> handleRecords(@RequestParam Integer patientID, @RequestParam Integer reqType){
+        System.out.println("In sammati");
         return recordService.handleRecords(patientID,reqType);
     }
 
-    @PostMapping("/fetch-records-by-consent-id/{consentId}/{doctorId}/{hospitalId}")
+    @GetMapping("/fetch-records-by-consent-id/{consentId}/{doctorId}/{hospitalId}")
     public ResponseEntity<Object> fetchRecordsByConsentId(@PathVariable("consentId") Integer consentId,@PathVariable("doctorId") Integer doctorId, @PathVariable("hospitalId") Integer hospitalId)
     {
         System.out.println("in sammati");

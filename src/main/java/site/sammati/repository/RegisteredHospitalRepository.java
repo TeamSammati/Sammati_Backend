@@ -17,6 +17,9 @@ public interface RegisteredHospitalRepository extends JpaRepository<RegisteredHo
     @Query("select hospitalName from RegisteredHospitals where hospitalId=?1")
     String gethospitalNameByHospitalId(Integer hospitalId);
 
+    @Query("select token from RegisteredHospitals  where hospitalId=?1")
+    String getTokenByHospitalId(Integer hospitalId);
+
 
     @Query("select r from RegisteredHospitals r")
     List<RegisteredHospitals> getHospitalDetails();

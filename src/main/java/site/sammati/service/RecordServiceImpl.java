@@ -44,7 +44,7 @@ public class RecordServiceImpl implements RecordService{
                 System.out.println("hospitalId "+i.getHospitalId());
                 System.out.println("hospitalName "+hosName);
                 System.out.println("ipaddress "+ipaddress);
-                String uri = "http://"+ipaddress+":6969/api/auth/send-records/"+patientID+"/"+reqType;
+                String uri = "http://"+ipaddress+":6969/send-records/"+patientID+"/"+reqType;
                 RestTemplate restTemplate = new RestTemplate();
                 List<Object> result = restTemplate.getForObject(uri, List.class);
                 System.out.println(result);
@@ -123,10 +123,11 @@ public class RecordServiceImpl implements RecordService{
             System.out.println("hospitalName "+hosName);
             System.out.println("ipaddress "+ipaddress);
             System.out.println("recordId "+entry.getValue());
-            String uri = "http://"+ipaddress+":6969/api/auth/send-patient-records";
+            String uri = "http://"+ipaddress+":6969/send-patient-records";
             RestTemplate restTemplate = new RestTemplate();
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.set("Authorization", "Bearer "+registeredHospitalRepository.getTokenByHospitalId(entry.getKey()));
             HttpEntity<ArrayList<Integer>> request = new HttpEntity<ArrayList<Integer>>(recordIds, headers);
             List<Object> result = restTemplate.postForObject(uri, request , List.class);
             data.put("hospitalId", entry.getKey());

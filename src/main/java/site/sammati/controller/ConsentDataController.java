@@ -5,6 +5,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -97,9 +98,15 @@ public class ConsentDataController {
         String allKeys = "";
         for (Map.Entry<Integer, String> entry : hospitalIps.entrySet()) {
             System.out.println("[" + entry.getKey() + ", " + entry.getValue() + "]");
-            String uri = "http://"+entry.getValue()+":"+env.getProperty("app.hospital_port")+"/api/auth/authorize-patient?patientId="+patientId;
+            String uri = "http://"+entry.getValue()+":"+env.getProperty("app.hospital_port")+"/authorize-patient?patientId="+patientId;
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.set("Authorization", "Bearer "+registeredHospitalRepository.getTokenByHospitalId(entry.getKey()));
+            HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
             RestTemplate restTemplate = new RestTemplate();
-            String result = restTemplate.getForObject(uri, String.class);
+            ResponseEntity<Object> result = restTemplate.exchange(uri, HttpMethod.GET, requestEntity, Object.class);
+//            RestTemplate restTemplate = new RestTemplate();
+//            String result = restTemplate.getForObject(uri, String.class);
             allKeys+=result;
         }
 
@@ -131,10 +138,17 @@ public class ConsentDataController {
             String temp = decrAllKeys.substring(hospitalIndex*5, (hospitalIndex*5)+5);
             hospitalIndex++;
 //            System.out.println(temp);
-            String uri = "http://"+entry.getValue()+":"+env.getProperty("app.hospital_port")+"/api/auth/validate-patient?patientId="+patientId+"&str="+temp;
+            String uri = "http://"+entry.getValue()+":"+env.getProperty("app.hospital_port")+"/validate-patient?patientId="+patientId+"&str="+temp;
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.set("Authorization", "Bearer "+registeredHospitalRepository.getTokenByHospitalId(entry.getKey()));
+            HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
             RestTemplate restTemplate = new RestTemplate();
-            boolean result = restTemplate.getForObject(uri, boolean.class);
-            isValid = isValid & result;
+            ResponseEntity<Boolean> result = restTemplate.exchange(uri, HttpMethod.GET, requestEntity, boolean.class);
+
+//            RestTemplate restTemplate = new RestTemplate();
+//            boolean result = restTemplate.getForObject(uri, boolean.class);
+            isValid = isValid & result.getBody();
         }
         System.out.println(isValid);
         if(isValid) {

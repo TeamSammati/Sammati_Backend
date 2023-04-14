@@ -15,7 +15,7 @@ public class DelegationMappingController
 {
     private final DelegationMappingService delegationMappingService;
     @PostMapping("/add-delegation-mapping")
-    public void add_delegation_mapping(@RequestBody DelegationMapping delegationMapping) {
-        delegationMappingService.saveDelegationMapping(delegationMapping);
+    public Integer add_delegation_mapping(@RequestBody DelegationMapping delegationMapping) {
+        return delegationMappingService.saveDelegationMapping(delegationMapping);
     }
 }

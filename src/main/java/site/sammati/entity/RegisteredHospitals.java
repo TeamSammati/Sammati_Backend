@@ -25,4 +25,6 @@ public class RegisteredHospitals {
     private Integer registrationNo;
     @Column(nullable = false)
     private String ipAddress;
+
+    private String token;
 }
