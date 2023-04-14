@@ -12,8 +12,8 @@ public class DelegationMappingServiceImpl implements DelegationMappingService
 
     private final DelegationMappingRepository delegationMappingRepository;
     @Override
-    public void saveDelegationMapping(DelegationMapping delegationMapping)
+    public Integer saveDelegationMapping(DelegationMapping delegationMapping)
     {
-        delegationMappingRepository.save(delegationMapping);
+        return delegationMappingRepository.save(delegationMapping).getConsentId();
     }
 }

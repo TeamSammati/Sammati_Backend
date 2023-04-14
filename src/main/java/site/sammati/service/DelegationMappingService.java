@@ -7,5 +7,5 @@ import site.sammati.entity.DelegationMapping;
 public interface DelegationMappingService 
 {
 
-    void saveDelegationMapping(DelegationMapping delegationMapping);
+    Integer saveDelegationMapping(DelegationMapping delegationMapping);
 }

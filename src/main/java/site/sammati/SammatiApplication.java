@@ -12,13 +12,13 @@ public class SammatiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SammatiApplication.class, args);
 	}
-	@Bean
-	public WebMvcConfigurer configure() {
-		return new WebMvcConfigurer() {
-			@Override
-			public void addCorsMappings(CorsRegistry reg) {
-				reg.addMapping("/**").allowedOrigins("*");
-			}
-		};
-	}
+//	@Bean
+//	public WebMvcConfigurer configure() {
+//		return new WebMvcConfigurer() {
+//			@Override
+//			public void addCorsMappings(CorsRegistry reg) {
+//				reg.addMapping("/**").allowedOrigins("*");
+//			}
+//		};
+//	}
 }

@@ -2,10 +2,7 @@ package site.sammati.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import site.sammati.entity.RegisteredDoctors;
 import site.sammati.service.RegisteredDoctorService;
 import site.sammati.service.RegisteredHospitalService;
@@ -24,7 +21,7 @@ public class DoctorHospitalMappingController
         return registeredDoctorService.savePatientHospitalMapping(registeredDoctors);
     }
 
-    @PostMapping("/hospital-with-doctors")
+    @GetMapping("/hospital-with-doctors")
     public ResponseEntity<Object> getHospitalDoctorData()
     {
         System.out.println("in sammati");
