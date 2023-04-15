@@ -11,9 +11,11 @@ public interface ConsentDataService {
 
     Integer saveConsentDataMapping(ConsentDataMapping consentDataMapping);
 
-    List<ConsentData> activeConsent(Integer patientId);
+    List<ActiveConsentDTO> activeConsent(Integer patientId);
 
     Integer revokeConsent(Integer consentId);
 
     List<ActiveConsentDTO> activeConsentOfDoctor(Integer doctorId, Integer hospitalId);
+
+    Integer extendConsent(Integer consentId,Integer days);
 }

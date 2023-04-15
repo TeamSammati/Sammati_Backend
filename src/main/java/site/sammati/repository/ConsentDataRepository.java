@@ -37,4 +37,8 @@ public interface ConsentDataRepository extends JpaRepository<ConsentData,Integer
     @Query("select c.consentType from ConsentData c where c.consentId=?1")
     Integer findConsentTypeByConsentId(Integer consentId);
 
+    @Modifying
+    @Transactional
+    @Query("update ConsentData set duration=?2 where consentId=?1")
+    Integer extendConsent(Integer consentId, Integer duration);
 }
