@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import site.sammati.entity.DelegationMapping;
 import site.sammati.repository.DelegationMappingRepository;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class DelegationMappingServiceImpl implements DelegationMappingService
@@ -14,6 +16,13 @@ public class DelegationMappingServiceImpl implements DelegationMappingService
     @Override
     public Integer saveDelegationMapping(DelegationMapping delegationMapping)
     {
-        return delegationMappingRepository.save(delegationMapping).getConsentId();
+        Integer exist=delegationMappingRepository.isConsentDelegable(delegationMapping.getConsentId(),delegationMapping.getRequestingDoctorId(),delegationMapping.getRequestingHospitalId());
+        if(exist!=null)
+        {
+            return delegationMappingRepository.save(delegationMapping).getId();
+        }
+
+        return -99;
+
     }
 }
