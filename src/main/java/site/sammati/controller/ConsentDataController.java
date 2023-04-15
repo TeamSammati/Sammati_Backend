@@ -17,6 +17,7 @@ import site.sammati.dto.ActiveConsentDTO;
 import site.sammati.dto.ConsentDataDTO;
 import site.sammati.entity.ConsentData;
 import site.sammati.entity.ConsentDataMapping;
+import site.sammati.entity.ConsentRequest;
 import site.sammati.repository.RegisteredHospitalRepository;
 import site.sammati.service.ConsentDataService;
 import site.sammati.service.ConsentRequestService;
@@ -35,6 +36,7 @@ import static site.sammati.service.EncyDecryService.decryptData;
 import static site.sammati.service.EncyDecryService.encryptData;
 import static site.sammati.service.OTPService.generateOTP;
 import static site.sammati.service.OTPService.sendOTP;
+import static site.sammati.util.enums.ConsentRequestStatus.APPROVED;
 
 
 @RestController
@@ -47,7 +49,6 @@ public class ConsentDataController {
     private final Environment env;
     private final RegisteredHospitalRepository registeredHospitalRepository;
     private final ConsentDataService consentDataService;
-
     private final ConsentRequestService consentRequestService;
 
     public ConsentDataController(ConsentDataService consentDataService, RegisteredHospitalRepository registeredHospitalRepository, Environment env,ConsentRequestService consentRequestService) {
@@ -206,5 +207,30 @@ public class ConsentDataController {
     public Boolean extendConsent(@RequestParam Integer consentId,@RequestParam Integer days){
         Integer extendedConsentId=consentDataService.extendConsent(consentId,days);
         return extendedConsentId>0;
+    }
+
+    @PostMapping("/grant-emergency-consent")
+    public Integer grantEmergencyConsent(@RequestParam Integer pId,@RequestParam Integer dId, @RequestParam Integer hId, @RequestParam Integer authId) {
+        ConsentRequest consentRequest = new ConsentRequest();
+        consentRequest.setDoctorId(dId);
+        consentRequest.setPatientId(pId);
+        consentRequest.setHospitalId(hId);
+        consentRequest.setPurpose("Emergency Access by Doctor ID: "+dId+" Hospital ID: "+hId+" Authorized by Authorizer ID: "+authId);
+        consentRequest.setConsentRequestStatus(APPROVED);
+        Integer conReqId = consentRequestService.saveConsentRequest(consentRequest);
+        // Created Consent Request for emergency access
+
+        ConsentData consentData = new ConsentData();
+        consentData.setConsentType(1);
+        consentData.setConsentRequestId(conReqId);
+        consentData.setPatientId(pId);
+        consentData.setDoctorId(dId);
+        consentData.setDuration(1);
+        consentData.setActivationStatus(1);
+        Date date = Date.valueOf(LocalDate.now());
+        consentData.setConsentTimeStamp(date);
+
+        Integer consentId = consentDataService.saveConsentData(consentData);
+        return consentId;
     }
 }

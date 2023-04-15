@@ -32,6 +32,10 @@ public interface ConsentDataRepository extends JpaRepository<ConsentData,Integer
     List<Object> findDoctor(Integer consentId, Integer doctorId, Integer hospitalId);
 
     ConsentData findByConsentId(Integer consentId);
+    @Query("select c.patientId from ConsentData c where c.consentId=?1")
+    Integer findPatientIdByConsentid(Integer consentId);
+    @Query("select c.consentType from ConsentData c where c.consentId=?1")
+    Integer findConsentTypeByConsentId(Integer consentId);
 
     @Modifying
     @Transactional
