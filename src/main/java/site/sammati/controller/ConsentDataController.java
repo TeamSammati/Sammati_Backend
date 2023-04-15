@@ -13,6 +13,7 @@ import org.springframework.core.env.Environment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import site.sammati.dto.ActiveConsentDTO;
 import site.sammati.dto.ConsentDataDTO;
 import site.sammati.entity.ConsentData;
 import site.sammati.entity.ConsentDataMapping;
@@ -196,8 +197,8 @@ public class ConsentDataController {
     }
 
     @GetMapping("/active-consents-doctor")
-    public List<ConsentData> activeConsentForDoctor(@RequestParam Integer doctorId){
-        List<ConsentData> activeConsentList=consentDataService.activeConsentOfDoctor(doctorId);
+    public List<ActiveConsentDTO> activeConsentForDoctor(@RequestParam Integer doctorId, @RequestParam Integer hospitalId){
+        List<ActiveConsentDTO> activeConsentList=consentDataService.activeConsentOfDoctor(doctorId,hospitalId);
         return activeConsentList;
     }
 }

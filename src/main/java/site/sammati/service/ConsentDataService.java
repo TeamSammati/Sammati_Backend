@@ -1,5 +1,6 @@
 package site.sammati.service;
 
+import site.sammati.dto.ActiveConsentDTO;
 import site.sammati.entity.ConsentData;
 import site.sammati.entity.ConsentDataMapping;
 
@@ -14,5 +15,5 @@ public interface ConsentDataService {
 
     Integer revokeConsent(Integer consentId);
 
-    List<ConsentData> activeConsentOfDoctor(Integer doctorId);
+    List<ActiveConsentDTO> activeConsentOfDoctor(Integer doctorId, Integer hospitalId);
 }

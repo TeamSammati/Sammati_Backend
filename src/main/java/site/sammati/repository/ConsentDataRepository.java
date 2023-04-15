@@ -24,9 +24,13 @@ public interface ConsentDataRepository extends JpaRepository<ConsentData,Integer
     @Query("update ConsentData set activationStatus=0 where consentId=?1")
     Integer updateActivationStatus(Integer consentId);
 
-    @Query("select c from ConsentData c where c.doctorId=?1 and c.activationStatus=1")
-    List<ConsentData> getActiveConsentForDoctor(Integer doctorId);
+
+    @Query(nativeQuery = true,value = "select * from consent_data c natural join consent_request c2 where c.doctor_id=?1 and c2.hospital_id=?2 and c.activation_status=1")
+    List<ConsentData> getActiveConsentForDoctor(Integer doctorId,Integer hospitalId);
 
     @Query("select c.consentId,s.hospitalId,s.doctorId from ConsentData c,ConsentRequest s where c.consentRequestId=s.consentRequestId and c.consentId=?1 and s.doctorId=?2 and s.hospitalId=?3")
     List<Object> findDoctor(Integer consentId, Integer doctorId, Integer hospitalId);
+
+    ConsentData findByConsentId(Integer consentId);
+
 }

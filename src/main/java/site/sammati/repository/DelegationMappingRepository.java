@@ -12,4 +12,7 @@ public interface DelegationMappingRepository extends JpaRepository<DelegationMap
 
     @Query("select d.consentId,d.doctorId,d.hospitalId from DelegationMapping d where d.consentId=?1 and d.doctorId=?2 and d.hospitalId=?3")
     List<Object> findDoctor(Integer cId, Integer dId, Integer hId);
+
+    @Query("select c.consentId from DelegationMapping c where c.doctorId=?1 and c.hospitalId=?2")
+    List<Integer> delegatedConsentId(Integer doctorId,Integer hospitalId);
 }
