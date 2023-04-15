@@ -30,6 +30,10 @@ public class DelegationMapping
     @Column(nullable = false)
     private Integer hospitalId;
 
-//    @Column(nullable = false)
-//    private Integer duration;
+    @Column(nullable = false)
+    private  Integer RequestingDoctorId;
+
+    @Column(nullable = false)
+    private  Integer RequestingHospitalId;
+
 }
