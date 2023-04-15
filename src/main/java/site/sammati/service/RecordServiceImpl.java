@@ -106,44 +106,69 @@ public class RecordServiceImpl implements RecordService{
 //        return new ResponseEntity<Object>(finalData, HttpStatus.OK);
 //    }
 
-    public ResponseEntity<Object> fetchPatientData(Integer consentId)
-    {
-        List<Map<String,Object>> finalData=new ArrayList<>();
-        List<List<Integer>> hospitalRecordMapping=consentDataMappingRepository.findByConsentId(consentId);
-        Map<Integer,ArrayList<Integer>> list=new HashMap<>();
-        for(List<Integer> i: hospitalRecordMapping) {
-            Integer hospitalId = i.get(0);
-            Integer recordId = i.get(1);
-            if (list.get(hospitalId) == null) {
-                list.put(hospitalId, new ArrayList<Integer>());
+    public ResponseEntity<Object> fetchPatientData(Integer consentId) {
+        Integer patId = consentDataRepository.findPatientIdByConsentid(consentId);
+        Integer consentType = consentDataRepository.findConsentTypeByConsentId(consentId);
+        System.out.println(patId);
+        System.out.println(consentType);
+        List<Map<String, Object>> finalData = new ArrayList<>();
+        if (consentType == 0) {
+            List<List<Integer>> hospitalRecordMapping = consentDataMappingRepository.findByConsentId(consentId);
+            Map<Integer, ArrayList<Integer>> list = new HashMap<>();
+            for (List<Integer> i : hospitalRecordMapping) {
+                Integer hospitalId = i.get(0);
+                Integer recordId = i.get(1);
+                if (list.get(hospitalId) == null) {
+                    list.put(hospitalId, new ArrayList<Integer>());
+                }
+                list.get(hospitalId).add(recordId);
             }
-            list.get(hospitalId).add(recordId);
-        }
+            for (Map.Entry<Integer, ArrayList<Integer>> entry : list.entrySet()) {
+                Map<String, Object> data = new HashMap<String, Object>();
+                String ipaddress = registeredHospitalRepository.getIpAddressByHospitalId(entry.getKey());
+                String hosName = registeredHospitalRepository.gethospitalNameByHospitalId(entry.getKey());
+                ArrayList<Integer> recordIds = entry.getValue();
+                System.out.println("hospitalId " + entry.getKey());
+                System.out.println("hospitalName " + hosName);
+                System.out.println("ipaddress " + ipaddress);
+                System.out.println("recordId " + entry.getValue());
+                String uri = "http://" + ipaddress + "/send-patient-records";
+                RestTemplate restTemplate = new RestTemplate();
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_JSON);
+                headers.set("Authorization", "Bearer " + registeredHospitalRepository.getTokenByHospitalId(entry.getKey()));
+                HttpEntity<ArrayList<Integer>> request = new HttpEntity<ArrayList<Integer>>(recordIds, headers);
+                List<Object> result = restTemplate.postForObject(uri, request, List.class);
+                data.put("hospitalId", entry.getKey());
+                data.put("hospitalName", registeredHospitalRepository.gethospitalNameByHospitalId(entry.getKey()));
+                data.put("data", result);
+                finalData.add(data);
+            }
+        } else {
+            List<PatientHospitalMapping> registeredHospitals = patientHospitalRepository.findByPatientId(patId);
 
-        for (Map.Entry<Integer,ArrayList<Integer>> entry : list.entrySet())
-        {
-            Map<String, Object> data = new HashMap<String, Object>();
-            String ipaddress= registeredHospitalRepository.getIpAddressByHospitalId(entry.getKey());
-            String hosName= registeredHospitalRepository.gethospitalNameByHospitalId(entry.getKey());
-            ArrayList<Integer> recordIds=entry.getValue();
-            System.out.println("hospitalId "+entry.getKey());
-            System.out.println("hospitalName "+hosName);
-            System.out.println("ipaddress "+ipaddress);
-            System.out.println("recordId "+entry.getValue());
-            String uri = "http://"+ipaddress+"/send-patient-records";
-            RestTemplate restTemplate = new RestTemplate();
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.set("Authorization", "Bearer "+registeredHospitalRepository.getTokenByHospitalId(entry.getKey()));
-            HttpEntity<ArrayList<Integer>> request = new HttpEntity<ArrayList<Integer>>(recordIds, headers);
-            List<Object> result = restTemplate.postForObject(uri, request , List.class);
-            data.put("hospitalId", entry.getKey());
-            data.put("hospitalName", registeredHospitalRepository.gethospitalNameByHospitalId(entry.getKey()));
-            data.put("data", result);
-            finalData.add(data);
-        }
 
-       // addLogs(consentRequestId);
+            System.out.println("Hello Bhi "+registeredHospitals);
+            for (PatientHospitalMapping i : registeredHospitals) {
+                Map<String, Object> allData = new HashMap<String, Object>();
+                String ipaddress = registeredHospitalRepository.getIpAddressByHospitalId(i.getHospitalId());
+
+                allData.put("hospitalId", i.getHospitalId());
+                allData.put("hospitalName", registeredHospitalRepository.gethospitalNameByHospitalId(i.getHospitalId()));
+                String uri = "http://" + ipaddress + "/send-all-patient-records/?patientId="+patId;
+
+                RestTemplate restTemplate = new RestTemplate();
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_JSON);
+                headers.set("Authorization", "Bearer " + registeredHospitalRepository.getTokenByHospitalId(i.getHospitalId()));
+                System.out.println(registeredHospitalRepository.getTokenByHospitalId(i.getHospitalId()));
+                HttpEntity<Void> request = new HttpEntity<>(headers);
+                ResponseEntity<Object> result = restTemplate.exchange(uri, HttpMethod.GET, request, Object.class);
+                allData.put("data", result);
+                System.out.println("Iam here");
+                finalData.add(allData);
+            }
+        }
         return new ResponseEntity<Object>(finalData, HttpStatus.OK);
     }
 
@@ -166,7 +191,6 @@ public class RecordServiceImpl implements RecordService{
         return null;
     }
 
-    //    @Autowired
     public void addLogs(Integer consentRequestId){
 
         ConsentRequest consentRequest=consentRequestRepository.findByConsentRequestId(consentRequestId);
