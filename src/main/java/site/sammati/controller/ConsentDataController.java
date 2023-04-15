@@ -185,8 +185,8 @@ public class ConsentDataController {
     }
 
     @GetMapping("/active-consents")
-    public List<ConsentData> activeConsent(@RequestParam Integer patientId){
-        List<ConsentData> activeConsentList=consentDataService.activeConsent(patientId);
+    public List<ActiveConsentDTO> activeConsent(@RequestParam Integer patientId){
+        List<ActiveConsentDTO> activeConsentList=consentDataService.activeConsent(patientId);
         return activeConsentList;
     }
 
@@ -200,5 +200,11 @@ public class ConsentDataController {
     public List<ActiveConsentDTO> activeConsentForDoctor(@RequestParam Integer doctorId, @RequestParam Integer hospitalId){
         List<ActiveConsentDTO> activeConsentList=consentDataService.activeConsentOfDoctor(doctorId,hospitalId);
         return activeConsentList;
+    }
+
+    @PostMapping("extend-consent")
+    public Boolean extendConsent(@RequestParam Integer consentId,@RequestParam Integer days){
+        Integer extendedConsentId=consentDataService.extendConsent(consentId,days);
+        return extendedConsentId>0;
     }
 }

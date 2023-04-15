@@ -36,11 +36,38 @@ public class ConsentDataServiceImpl implements ConsentDataService{
         return consentDataMappingRepository.save(consentDataMapping).getRhmid();
     }
 
-    public List<ConsentData> activeConsent(Integer patientId){
-        return consentDataRepository.getActiveConsent(patientId);
+    public List<ActiveConsentDTO> activeConsent(Integer patientId){
+        List<ConsentData> consentData= consentDataRepository.getActiveConsent(patientId);
+        for(ConsentData c:consentData){
+            Calendar cal=Calendar.getInstance();
+            try{
+                cal.setTime(c.getConsentTimeStamp());
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+            cal.add(Calendar.DAY_OF_MONTH, c.getDuration());
+            if(cal.getTime().before(new Date())){
+                consentDataRepository.updateActivationStatus(c.getConsentId());
+                consentData.remove(c);
+            }
+        }
+
+        List<ActiveConsentDTO> activeConsentDTOS=new ArrayList<>();
+        for(ConsentData c:consentData){
+            ActiveConsentDTO activeConsentDTO=ActiveConsentDTO.builder()
+                    .consentRequestId(c.getConsentRequestId())
+                    .consentId(c.getConsentId())
+                    .consentType(c.getConsentType())
+                    .patientId(c.getPatientId())
+                    .build();
+            activeConsentDTOS.add(activeConsentDTO);
+        }
+        return activeConsentDTOS;
     }
 
+
     public Integer revokeConsent(Integer consentId){
+
         return consentDataRepository.updateActivationStatus(consentId);
     }
 
@@ -78,5 +105,12 @@ public class ConsentDataServiceImpl implements ConsentDataService{
             activeConsentDTOS.add(activeConsentDTO);
         }
         return activeConsentDTOS;
+    }
+
+    public Integer extendConsent(Integer consentId,Integer days){
+        ConsentData consentData=consentDataRepository.findByConsentId(consentId);
+        Integer duration=consentData.getDuration()+days;
+        Integer extendedConsentId=consentDataRepository.extendConsent(consentId,duration);
+        return extendedConsentId;
     }
 }
