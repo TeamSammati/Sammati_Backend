@@ -44,13 +44,20 @@ public class RecordServiceImpl implements RecordService{
                 System.out.println("hospitalId "+i.getHospitalId());
                 System.out.println("hospitalName "+hosName);
                 System.out.println("ipaddress "+ipaddress);
-                String uri = "http://"+ipaddress+":6969/send-records/"+patientID+"/"+reqType;
+                String uri = "http://"+ipaddress+"/send-records/"+patientID+"/"+reqType;
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_JSON);
+                headers.set("Authorization", "Bearer "+registeredHospitalRepository.getTokenByHospitalId(i.getHospitalId()));
+                System.out.println("saasas"+registeredHospitalRepository.getTokenByHospitalId(i.getHospitalId()));
+                HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
                 RestTemplate restTemplate = new RestTemplate();
-                List<Object> result = restTemplate.getForObject(uri, List.class);
+                ResponseEntity<Object> result = restTemplate.exchange(uri, HttpMethod.GET, requestEntity, Object.class);
+    //                RestTemplate restTemplate = new RestTemplate();
+    //                List<Object> result = restTemplate.getForObject(uri, List.class);
                 System.out.println(result);
                 allData.put("hospitalId", i.getHospitalId());
                 allData.put("hospitalName", registeredHospitalRepository.gethospitalNameByHospitalId(i.getHospitalId()));
-                allData.put("data", result);
+                allData.put("data", result.getBody());
                 finaldata.add(allData);
             }
             System.out.println(finaldata);
@@ -123,7 +130,7 @@ public class RecordServiceImpl implements RecordService{
             System.out.println("hospitalName "+hosName);
             System.out.println("ipaddress "+ipaddress);
             System.out.println("recordId "+entry.getValue());
-            String uri = "http://"+ipaddress+":6969/send-patient-records";
+            String uri = "http://"+ipaddress+"/send-patient-records";
             RestTemplate restTemplate = new RestTemplate();
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
