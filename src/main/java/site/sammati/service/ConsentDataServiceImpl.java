@@ -6,11 +6,11 @@ import com.google.common.cache.LoadingCache;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import site.sammati.dto.ActiveConsentDTO;
+import site.sammati.dto.PatientActiveConsentDTO;
 import site.sammati.entity.ConsentData;
 import site.sammati.entity.ConsentDataMapping;
-import site.sammati.repository.ConsentDataMappingRepository;
-import site.sammati.repository.ConsentDataRepository;
-import site.sammati.repository.DelegationMappingRepository;
+import site.sammati.entity.RegisteredHospitals;
+import site.sammati.repository.*;
 
 import java.text.ParseException;
 import java.util.*;
@@ -25,6 +25,9 @@ public class ConsentDataServiceImpl implements ConsentDataService{
     private final ConsentDataRepository consentDataRepository;
     private final ConsentDataMappingRepository consentDataMappingRepository;
     private final DelegationMappingRepository delegationMappingRepository;
+    private final RegisteredDoctorsRepository registeredDoctorsRepository;
+    private final ConsentRequestRepository consentRequestRepository;
+    private final RegisteredHospitalRepository registeredHospitalRepository;
 
     @Override
     public Integer saveConsentData(ConsentData consentData) {
@@ -36,7 +39,7 @@ public class ConsentDataServiceImpl implements ConsentDataService{
         return consentDataMappingRepository.save(consentDataMapping).getRhmid();
     }
 
-    public List<ActiveConsentDTO> activeConsent(Integer patientId){
+    public List<PatientActiveConsentDTO> activeConsent(Integer patientId){
         List<ConsentData> consentData= consentDataRepository.getActiveConsent(patientId);
         for(ConsentData c:consentData){
             Calendar cal=Calendar.getInstance();
@@ -52,17 +55,23 @@ public class ConsentDataServiceImpl implements ConsentDataService{
             }
         }
 
-        List<ActiveConsentDTO> activeConsentDTOS=new ArrayList<>();
+        List<PatientActiveConsentDTO> patientActiveConsentDTOList=new ArrayList<>();
         for(ConsentData c:consentData){
-            ActiveConsentDTO activeConsentDTO=ActiveConsentDTO.builder()
+            Integer hospitalId=consentRequestRepository.getHospitalId(c.getConsentRequestId());
+            String name= registeredDoctorsRepository.getDoctorName(c.getDoctorId(),hospitalId).toString();
+            String hospitalName=registeredHospitalRepository.gethospitalNameByHospitalId(hospitalId);
+            PatientActiveConsentDTO patientActiveConsentDTO=PatientActiveConsentDTO.builder()
                     .consentRequestId(c.getConsentRequestId())
                     .consentId(c.getConsentId())
                     .consentType(c.getConsentType())
-                    .patientId(c.getPatientId())
+                    .doctorName(name)
+                    .hospitalName(hospitalName)
+                    .doctorId(c.getDoctorId())
+                    .hospitalId(hospitalId)
                     .build();
-            activeConsentDTOS.add(activeConsentDTO);
+            patientActiveConsentDTOList.add(patientActiveConsentDTO);
         }
-        return activeConsentDTOS;
+        return patientActiveConsentDTOList;
     }
 
 

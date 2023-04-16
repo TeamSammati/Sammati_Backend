@@ -12,4 +12,7 @@ public interface RegisteredDoctorsRepository extends JpaRepository<RegisteredDoc
 
     @Query("select r.doctorId,r.doctorName from RegisteredDoctors r where r.hospitalId=?1")
     List<Object> getAllDoctorByHospitalId(Integer hospitalId);
+
+    @Query("select r.doctorName from RegisteredDoctors r where r.doctorId=?1 and r.hospitalId=?2")
+    String getDoctorName(Integer doctorId,Integer hospitalId);
 }
