@@ -29,6 +29,7 @@ public class ConsentDataServiceImpl implements ConsentDataService{
     private final ConsentRequestRepository consentRequestRepository;
     private final RegisteredHospitalRepository registeredHospitalRepository;
 
+
     @Override
     public Integer saveConsentData(ConsentData consentData) {
         return consentDataRepository.save(consentData).getConsentId();
@@ -79,6 +80,7 @@ public class ConsentDataServiceImpl implements ConsentDataService{
 
         return consentDataRepository.updateActivationStatus(consentId);
     }
+
 
     public List<ActiveConsentDTO> activeConsentOfDoctor(Integer doctorId, Integer hospitalId){
         List<ConsentData> consentData=consentDataRepository.getActiveConsentForDoctor(doctorId,hospitalId);

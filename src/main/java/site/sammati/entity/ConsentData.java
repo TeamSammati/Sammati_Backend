@@ -32,8 +32,8 @@ public class ConsentData {
     private Date consentTimeStamp;
 
     private Integer consentType;
-    // 0 = Normal
-    // 1 = Emergency
+    // 0 = Emergency
+    // 1 = Normal
 
     @Column(nullable = false)
     private Integer activationStatus;
