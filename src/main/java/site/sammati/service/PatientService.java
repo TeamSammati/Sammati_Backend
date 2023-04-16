@@ -8,4 +8,7 @@ import site.sammati.dto.PatientOtpDto;
 public interface PatientService
 {
     PatientDataDto getPatientData(PatientOtpDto patientOtpDto);
+
+    PatientDataDto getEmergencyPatientData(Integer patientId, Integer hospitalId);
+
 }

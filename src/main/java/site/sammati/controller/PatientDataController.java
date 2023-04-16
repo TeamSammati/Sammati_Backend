@@ -22,4 +22,10 @@ public class PatientDataController
         System.out.println("in sammati");
         return patientService.getPatientData(patientOtpDto);
     }
+
+    @PostMapping("/get-emergency-patient-data-by-patient-id")
+    public PatientDataDto get_emergency_patient_data(@RequestParam Integer patientId, @RequestParam Integer hospitalId)
+    {
+        return patientService.getEmergencyPatientData(patientId, hospitalId);
+    }
 }
