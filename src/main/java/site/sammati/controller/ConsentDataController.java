@@ -52,6 +52,7 @@ public class ConsentDataController {
     private final ConsentDataService consentDataService;
     private final ConsentRequestService consentRequestService;
 
+
     public ConsentDataController(ConsentDataService consentDataService, RegisteredHospitalRepository registeredHospitalRepository, Environment env,ConsentRequestService consentRequestService) {
         this.consentDataService = consentDataService;
         this.registeredHospitalRepository = registeredHospitalRepository;
@@ -211,7 +212,11 @@ public class ConsentDataController {
     }
 
     @PostMapping("/grant-emergency-consent")
-    public Integer grantEmergencyConsent(@RequestParam Integer pId,@RequestParam Integer dId, @RequestParam Integer hId, @RequestParam Integer authId) {
+    public Integer grantEmergencyConsent(@RequestParam Integer pId, @RequestParam String phone, @RequestParam Integer dId, @RequestParam Integer hId, @RequestParam Integer authId) {
+
+        String hName = registeredHospitalRepository.gethospitalNameByHospitalId(hId);
+        String message = "Emergency Health Data Access by Doctor ID: "+dId+", Hospital: "+hName+", Authorized by Auth. ID: "+authId;
+        sendOTP(phone, message);
         ConsentRequest consentRequest = new ConsentRequest();
         consentRequest.setDoctorId(dId);
         consentRequest.setPatientId(pId);
@@ -222,7 +227,7 @@ public class ConsentDataController {
         // Created Consent Request for emergency access
 
         ConsentData consentData = new ConsentData();
-        consentData.setConsentType(1);
+        consentData.setConsentType(0);
         consentData.setConsentRequestId(conReqId);
         consentData.setPatientId(pId);
         consentData.setDoctorId(dId);

@@ -112,7 +112,7 @@ public class RecordServiceImpl implements RecordService{
         System.out.println(patId);
         System.out.println(consentType);
         List<Map<String, Object>> finalData = new ArrayList<>();
-        if (consentType == 0) {
+        if (consentType == 1) {
             List<List<Integer>> hospitalRecordMapping = consentDataMappingRepository.findByConsentId(consentId);
             Map<Integer, ArrayList<Integer>> list = new HashMap<>();
             for (List<Integer> i : hospitalRecordMapping) {
