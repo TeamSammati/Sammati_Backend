@@ -13,6 +13,9 @@ public interface PatientHospitalRepository extends JpaRepository<PatientHospital
     @Query("select p.patientId from PatientHospitalMapping p where p.patientId=?1")
     Integer patientExist(Integer patientId);
 
+    @Query("select p.id from PatientHospitalMapping p where p.patientId=?1 and p.hospitalId=?2")
+    Integer patientHospitalExist(Integer patientId, Integer hospitalId);
+
     public List<PatientHospitalMapping> findByPatientId(Integer patientId);
 
     @Modifying

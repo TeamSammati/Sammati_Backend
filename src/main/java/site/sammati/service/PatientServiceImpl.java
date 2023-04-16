@@ -44,4 +44,30 @@ public class PatientServiceImpl implements PatientService{
         System.out.println("id"+sequence);
         return result;
     }
+
+    @Override
+    public PatientDataDto getEmergencyPatientData(Integer patientId, Integer hospitalId) {
+        String uri = "http://"+env.getProperty("app.patient_server")+":"+env.getProperty("app.patient_port")+"/send-emergency-patient-data?patientId="+patientId;
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorization", "Bearer "+env.getProperty("app.patient_server_token"));
+        HttpEntity<Void> request = new HttpEntity<>(headers);
+        PatientDataDto result = restTemplate.postForObject(uri,request,PatientDataDto.class);
+        System.out.println("datatatatatatatat:"+result);
+        if(result==null)
+        {
+            return null;
+        }
+        Boolean patient_hosptial_exists = patientHospitalMappingService.IsPatientHospitalExist(patientId, hospitalId);
+        if(!patient_hosptial_exists)
+        {
+            PatientHospitalMapping patientHospitalMapping=new PatientHospitalMapping();
+            patientHospitalMapping.setPatientId(patientId);
+            patientHospitalMapping.setHospitalId(hospitalId);
+            patientHospitalMapping.setStatus(0);
+            Integer sequence=patientHospitalMappingService.savePatientHospitalMapping(patientHospitalMapping);
+        }
+        return result;
+    }
 }

@@ -14,5 +14,7 @@ public interface PatientHospitalMappingService
 
     Boolean IsPatientExist(Integer patientId);
 
+    Boolean IsPatientHospitalExist(Integer patientId, Integer hospitalId);
+
     void changePatientHospitalMapping(Integer patientId, Integer hospitalId);
 }

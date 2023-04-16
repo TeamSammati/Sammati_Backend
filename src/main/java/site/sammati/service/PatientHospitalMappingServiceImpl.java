@@ -31,6 +31,14 @@ public class PatientHospitalMappingServiceImpl implements PatientHospitalMapping
     }
 
     @Override
+    public Boolean IsPatientHospitalExist(Integer patientId, Integer hospitalId) {
+        Integer id =patientHospitalRepository.patientExist(patientId);
+        if(id!=null)return true;
+
+        return false;
+    }
+
+    @Override
     public void changePatientHospitalMapping(Integer patientId, Integer hospitalId)
     {
         patientHospitalRepository.changeMapping(patientId,hospitalId);
