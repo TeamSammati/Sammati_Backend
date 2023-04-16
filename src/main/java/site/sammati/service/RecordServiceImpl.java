@@ -155,7 +155,7 @@ public class RecordServiceImpl implements RecordService{
 
                 allData.put("hospitalId", i.getHospitalId());
                 allData.put("hospitalName", registeredHospitalRepository.gethospitalNameByHospitalId(i.getHospitalId()));
-                String uri = "http://" + ipaddress + "/send-all-patient-records/?patientId="+patId;
+                String uri = "http://" + ipaddress + "/send-all-patient-records?patientId="+patId;
 
                 RestTemplate restTemplate = new RestTemplate();
                 HttpHeaders headers = new HttpHeaders();
@@ -164,7 +164,7 @@ public class RecordServiceImpl implements RecordService{
                 System.out.println(registeredHospitalRepository.getTokenByHospitalId(i.getHospitalId()));
                 HttpEntity<Void> request = new HttpEntity<>(headers);
                 ResponseEntity<Object> result = restTemplate.exchange(uri, HttpMethod.GET, request, Object.class);
-                allData.put("data", result);
+                allData.put("data", result.getBody());
                 System.out.println("Iam here");
                 finalData.add(allData);
             }
