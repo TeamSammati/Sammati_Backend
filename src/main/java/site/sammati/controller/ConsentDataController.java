@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import site.sammati.dto.ActiveConsentDTO;
 import site.sammati.dto.ConsentDataDTO;
+import site.sammati.dto.PatientActiveConsentDTO;
 import site.sammati.entity.ConsentData;
 import site.sammati.entity.ConsentDataMapping;
 import site.sammati.entity.ConsentRequest;
@@ -186,9 +187,9 @@ public class ConsentDataController {
     }
 
     @GetMapping("/active-consents")
-    public List<ActiveConsentDTO> activeConsent(@RequestParam Integer patientId){
-        List<ActiveConsentDTO> activeConsentList=consentDataService.activeConsent(patientId);
-        return activeConsentList;
+    public List<PatientActiveConsentDTO> activeConsent(@RequestParam Integer patientId){
+        List<PatientActiveConsentDTO> patientActiveConsentDTOList=consentDataService.activeConsent(patientId);
+        return patientActiveConsentDTOList;
     }
 
     @PostMapping("/revoke-consent")
